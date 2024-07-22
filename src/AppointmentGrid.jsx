@@ -8,8 +8,9 @@ function AppointmentGrid({
   people,
   timeUnits,
   unitType,
-  days,
 }) {
+  console.log("units time", timeUnits);
+  console.log("unitType", unitType);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
 
   const handleChipClick = (appointment) => {
@@ -30,22 +31,31 @@ function AppointmentGrid({
 
   const renderCells = (personIndex) => {
     return timeUnits.map((unit, unitIndex) => {
+      const person = people[personIndex];
       const unitAppointments = appointments.filter((appt) => {
         const apptDate = new Date(appt.datetime);
+        const isPersonMatch = appt.person === person;
+        let isTimeMatch = false;
+
         switch (unitType) {
-          case "days":
-            return apptDate.toDateString() === new Date(unit).toDateString();
-          case "hours":
-            return apptDate.getHours() === unit;
-          case "weeks":
-            const startOfWeek = new Date(unit);
-            const endOfWeek = new Date(startOfWeek);
-            endOfWeek.setDate(startOfWeek.getDate() + 6);
-            return apptDate >= startOfWeek && apptDate <= endOfWeek;
+          case "day":
+            isTimeMatch = apptDate.getDate() === new Date(unit.value).getDate();
+            break;
+          case "hour":
+            isTimeMatch = apptDate.getHours() === unit.value;
+            break;
+          case "week":
+            const weekStart = new Date(unit.minValue);
+            const weekEnd = new Date(unit.maxValue);
+            isTimeMatch = apptDate >= weekStart && apptDate <= weekEnd;
+            break;
           default:
-            return false;
+            isTimeMatch = false;
         }
+
+        return isPersonMatch && isTimeMatch;
       });
+
       return (
         <div key={`${personIndex}-${unitIndex}`} className="grid-cell">
           {unitAppointments.map((appt, index) => (
@@ -69,10 +79,7 @@ function AppointmentGrid({
             <div className="grid-header-cell"></div>
             {timeUnits.map((unit, index) => (
               <div key={index} className="grid-header-cell">
-                {unitType === "days" && new Date(unit).toLocaleDateString()}
-                {unitType === "hours" && `${unit}:00`}
-                {unitType === "weeks" &&
-                  `Week of ${new Date(unit).toLocaleDateString()}`}
+                {unit.label}
               </div>
             ))}
           </div>

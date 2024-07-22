@@ -4,24 +4,50 @@ import AppointmentForm from "./AppointmentForm";
 
 const initialPeople = ["John Doe", "Jane Smith", "Bob Johnson"];
 const initialDays = [
-  { label: "Monday", date: "2024-07-22" },
-  { label: "Tuesday", date: "2024-07-23" },
-  { label: "Wednesday", date: "2024-07-24" },
-  { label: "Thursday", date: "2024-07-25" },
-  { label: "Friday", date: "2024-07-26" },
+  { label: "Monday", value: "2024-07-22" },
+  { label: "Tuesday", value: "2024-07-23" },
+  { label: "Wednesday", value: "2024-07-24" },
+  { label: "Thursday", value: "2024-07-25" },
+  { label: "Friday", value: "2024-07-26" },
 ];
-const initialHours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
-const initialWeeks = ["Week 1", "Week 2", "Week 3", "Week 4"];
+const initialHours = Array.from({ length: 24 }, (_, i) => ({
+  label: `${i}:00`,
+  value: i,
+}));
+
+const initialWeeks = [
+  {
+    label: `Week 1`,
+    minValue: `2024-07-21`,
+    maxValue: `2024-07-27`,
+  },
+  {
+    label: `Week 2`,
+    minValue: `2024-07-28`,
+    maxValue: `2024-08-03`,
+  },
+  {
+    label: `Week 3`,
+    minValue: `2024-08-04`,
+    maxValue: `2024-08-10`,
+  },
+  {
+    label: `Week 4`,
+    minValue: `2024-08-11`,
+    maxValue: `2024-08-17`,
+  },
+];
+
 const initialAppointments = [
   {
     id: 1,
-    person: "Alice",
+    person: "John Doe",
     datetime: "2024-07-22T09:00",
     description: "Dentist",
   },
   {
     id: 2,
-    person: "Bob",
+    person: "John Doe",
     datetime: "2024-07-22T10:00",
     description: "Meeting",
   },
